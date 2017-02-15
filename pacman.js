@@ -1,7 +1,7 @@
 // Setup initial game stats
 var score = 0;
 var lives = 2;
-var power_pellets = 4;
+var powerPellets = 4;
 
 
 // Define your ghosts here
@@ -57,17 +57,35 @@ function clearScreen() {
 
 function displayStats() {
   console.log('Score: ' + score + '     Lives: ' + lives + '\n');
-  console.log('Power Pellets: ' + power_pellets);
+  console.log('Power Pellets: ' + powerPellets);
 }
 
 function displayMenu() {
   console.log('\n\nSelect Option:\n');  // each \n creates a new line
   console.log('(d) Eat Dot');
-  console.log('(p) Eat Power-Pellet')
-  console.log('(1) Eat Inky')
-  console.log('(2) Eat Blinky')
-  console.log('(3) Eat Pinky')
-  console.log('(4) Eat Clyde')
+  if (powerPellets > 0) {               // only displays p option of power-pellets available
+    console.log('(p) Eat Power-Pellet');
+  };
+  if (ghosts[0].edible === true) {
+    console.log('(1) Eat Inky (edible)');
+  } else {
+    console.log('(1) Eat Inky (inedible)');
+    }
+  if (ghosts[1].edible === true) {
+    console.log('(2) Eat Blinky (edible)');
+  } else {
+    console.log('(2) Eat Blinky (inedible)');
+  }
+  if (ghosts[2].edible === true) {
+    console.log('(3) Eat Pinky (edible)');
+  } else {
+    console.log('(3) Eat Pinky (inedible)');
+    }
+  if (ghosts[3].edible === true) {
+    console.log('(4) Eat Clyde (edible)');
+  } else {
+    console.log('(4) Eat Clyde (inedible)');
+  }
   console.log('(q) Quit');
 }
 
@@ -91,7 +109,8 @@ function processInput(key) {
       process.exit();
       break;
     case 'p':
-
+      eatPowerPellet();
+      break;
     case '1':
       eatGhost(inky);
       break;
@@ -118,8 +137,9 @@ function eatGhost(ghost) {
         console.log("\nThe " + ghost.colour + " ghost, " + ghost.name + ", ate Pac-Mac!");
     } else if (lives > 0 && ghost.edible === true){
         console.log("\nPac-Mac ate the " + ghost.character + " ghost, " + ghost.name + "!");
-        score += ghostScoreValue
-        ghostScoreValue = ghostScoreValue * 2
+        score += 200;
+        // score += ghostScoreValue
+        // ghostScoreValue = ghostScoreValue * 2
         ghost.edible = false
     } else if (lives === 0) {
         process.exit();
@@ -127,9 +147,16 @@ function eatGhost(ghost) {
 }
 
 function eatPowerPellet() {
+  if (powerPellets > 0) {
+  powerPellets -= 1;
   score += 50;
-
-  power_pellets -= 1;
+    for (var i = 0; i <= 3; i++) {
+      ghosts[i].edible = true;
+    };
+  }
+  else {
+    console.log('\n You have no Power-Pellets Left!');
+  };
 }
 
 //
