@@ -1,6 +1,7 @@
 // Setup initial game stats
 var score = 0;
 var lives = 2;
+var power_pellets = 4;
 
 
 // Define your ghosts here
@@ -14,27 +15,30 @@ var inky = {
 
 var blinky = {
   menu_option: '2',
-  name: 'Blinky'
-  colour: 'Cyan'
-  character: 'Speedy'
+  name: 'Blinky',
+  colour: 'Cyan',
+  character: 'Speedy',
   edible: false
-}
+};
 
 var pinky = {
   menu_option: '3',
   name: 'Pinky',
   colour: 'Pink',
-  character: 'Bashful'
+  character: 'Bashful',
   edible: false
-}
+};
+
 var clyde = {
-  menu_option: '4'
-  name: 'Clyde'
-  colour: 'Orange'
-  character: 'Pokey'
-}
+  menu_option: '4',
+  name: 'Clyde',
+  colour: 'Orange',
+  character: 'Pokey',
+  edible: false
+};
 
 // replace this comment with your four ghosts setup as objects
+var ghosts = [inky, blinky, pinky, clyde];
 
 
 // Draw the screen functionality
@@ -52,12 +56,18 @@ function clearScreen() {
 }
 
 function displayStats() {
-  console.log('Score: ' + score + '     Lives: ' + lives);
+  console.log('Score: ' + score + '     Lives: ' + lives + '\n');
+  console.log('Power Pellets: ' + power_pellets);
 }
 
 function displayMenu() {
   console.log('\n\nSelect Option:\n');  // each \n creates a new line
   console.log('(d) Eat Dot');
+  console.log('(p) Eat Power-Pellet')
+  console.log('(1) Eat Inky')
+  console.log('(2) Eat Blinky')
+  console.log('(3) Eat Pinky')
+  console.log('(4) Eat Clyde')
   console.log('(q) Quit');
 }
 
@@ -73,13 +83,26 @@ function eatDot() {
   score += 10;
 }
 
-
 // Process Player's Input
 function processInput(key) {
   switch(key) {
     case '\u0003': // This makes it so CTRL-C will quit the program
     case 'q':
       process.exit();
+      break;
+    case 'p':
+
+    case '1':
+      eatGhost(inky);
+      break;
+    case '2':
+      eatGhost(blinky);
+      break;
+    case '3':
+      eatGhost(pinky);
+      break;
+    case '4':
+      eatGhost(clyde);
       break;
     case 'd':
       eatDot();
@@ -89,6 +112,25 @@ function processInput(key) {
   }
 }
 
+function eatGhost(ghost) {
+    if (ghost.edible === false && lives > 0) {
+        lives--;
+        console.log("\nThe " + ghost.colour + " ghost, " + ghost.name + ", ate Pac-Mac!");
+    } else if (lives > 0 && ghost.edible === true){
+        console.log("\nPac-Mac ate the " + ghost.character + " ghost, " + ghost.name + "!");
+        score += ghostScoreValue
+        ghostScoreValue = ghostScoreValue * 2
+        ghost.edible = false
+    } else if (lives === 0) {
+        process.exit();
+    }
+}
+
+function eatPowerPellet() {
+  score += 50;
+
+  power_pellets -= 1;
+}
 
 //
 // YOU PROBABLY DON'T WANT TO CHANGE CODE BELOW THIS LINE
